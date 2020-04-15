@@ -1,0 +1,143 @@
+Index: app/src/main/java/com/example/databinding/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/databinding/MainActivity.java	(date 1586952201000)
++++ app/src/main/java/com/example/databinding/MainActivity.java	(date 1586953619017)
+@@ -3,8 +3,11 @@
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.databinding.DataBindingUtil;
+ 
++import android.content.Context;
+ import android.os.Bundle;
++import android.view.View;
+ import android.widget.TextView;
++import android.widget.Toast;
+ 
+ import com.example.databinding.databinding.ActivityMainBinding;
+ 
+@@ -12,6 +15,7 @@
+ 
+ 
+     private ActivityMainBinding activityMainBinding;
++    private MainActivityClickHandlers clickHandlers;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+@@ -20,6 +24,9 @@
+ 
+         activityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+         activityMainBinding.setStudent(getCurrentStudent());
++
++        clickHandlers = new MainActivityClickHandlers(this);
++        activityMainBinding.setClickHandler(clickHandlers);
+     }
+ 
+     private Student getCurrentStudent(){
+@@ -29,5 +36,22 @@
+         student.setStudentEmail("mrtarunsaraswat@gmail.com");
+         return student;
+ 
++    }
++
++    public class MainActivityClickHandlers{
++
++        Context context;
++
++        public MainActivityClickHandlers(Context context) {
++            this.context = context;
++        }
++
++        public void onEnrollButtonClicked(View view) {
++            Toast.makeText(context,"Enroll Button Clicked",Toast.LENGTH_SHORT).show();
++        }
++
++        public void onCancelButtonClicked(View view) {
++            Toast.makeText(context,"Cancel Button Clicked",Toast.LENGTH_SHORT).show();
++        }
+     }
+ }
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_main.xml	(date 1586952201000)
++++ app/src/main/res/layout/activity_main.xml	(date 1586953314749)
+@@ -5,7 +5,12 @@
+         <variable
+             name="student"
+             type="com.example.databinding.Student" />
++        
++        <variable
++            name="clickHandler"
++            type="com.example.databinding.MainActivity.MainActivityClickHandlers" />
+     </data>
++    
+ 
+     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+         xmlns:app="http://schemas.android.com/apk/res-auto"
+@@ -19,7 +24,7 @@
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="@{student.studentName}"
+-            android:textSize="36sp"
++            android:textSize="30sp"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintHorizontal_bias="0.465"
+             app:layout_constraintLeft_toLeftOf="parent"
+@@ -33,7 +38,7 @@
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="@{student.studentEmail}"
+-            android:textSize="36sp"
++            android:textSize="30sp"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintHorizontal_bias="0.464"
+             app:layout_constraintLeft_toLeftOf="parent"
+@@ -42,6 +47,44 @@
+             app:layout_constraintVertical_bias="0.203"
+             />
+ 
++        <Button
++            android:id="@+id/button"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginStart="8dp"
++            android:layout_marginLeft="8dp"
++            android:layout_marginTop="8dp"
++            android:layout_marginEnd="8dp"
++            android:layout_marginRight="8dp"
++            android:layout_marginBottom="8dp"
++            android:text="Enroll"
++            android:onClick="@{clickHandler::onEnrollButtonClicked}"
++            android:textSize="30sp"
++            app:layout_constraintBottom_toBottomOf="parent"
++            app:layout_constraintEnd_toEndOf="parent"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintTop_toBottomOf="@+id/tvStudentEmail"
++            app:layout_constraintVertical_bias="0.211" />
++
++        <Button
++            android:id="@+id/button2"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginStart="8dp"
++            android:layout_marginLeft="8dp"
++            android:layout_marginTop="8dp"
++            android:layout_marginEnd="8dp"
++            android:layout_marginRight="8dp"
++            android:layout_marginBottom="8dp"
++            android:text="Cancel"
++            android:onClick="@{clickHandler::onCancelButtonClicked}"
++            android:textSize="30sp"
++            app:layout_constraintBottom_toBottomOf="parent"
++            app:layout_constraintEnd_toEndOf="parent"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintTop_toBottomOf="@+id/tvStudentEmail"
++            app:layout_constraintVertical_bias="0.718" />
++
+ 
+     </androidx.constraintlayout.widget.ConstraintLayout>
+ 
